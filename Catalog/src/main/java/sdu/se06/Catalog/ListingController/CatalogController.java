@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.*;
 import sdu.se06.Catalog.Catalog.Listing;
 
 import java.util.List;
-@RequestMapping("/listing")
+@RequestMapping("/api/v1/")
 @RestController
 public class CatalogController {
 
@@ -14,13 +14,13 @@ public class CatalogController {
         this.repository = repository;
     }
 
-    @PostMapping("/api/v1/")
+    @PostMapping("/listing/")
     public Listing createListing(@RequestBody Listing listing) {
 
         return repository.save(listing);
     }
 
-    @GetMapping("/api/v1/")
+    @GetMapping("/listing/")
     public List<Listing> getListings() {
 
         return repository.findAll();

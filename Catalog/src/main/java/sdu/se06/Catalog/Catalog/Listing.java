@@ -20,7 +20,7 @@ public class Listing {
     public Listing(int listingID, String listingName, boolean closed, double listingPrice, int sellerID, Item item) {
         this.listingID = listingID;
         this.listingName = listingName;
-        this.closed = closed;
+        this.closed = false;
         this.listingPrice = listingPrice;
         this.sellerID = sellerID;
         this.item = item;
