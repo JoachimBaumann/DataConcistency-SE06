@@ -1,5 +1,6 @@
 package sdu.se06.Catalog.ListingController;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import sdu.se06.Catalog.Catalog.Listing;
 
@@ -15,9 +16,10 @@ public class CatalogController {
     }
 
     @PostMapping("/listing/")
-    public Listing createListing(@RequestBody Listing listing) {
+    public ResponseEntity<String> createListing(Listing listings) {
 
-        return repository.save(listing);
+        repository.save(listings);
+        return ResponseEntity.ok("Data saved");
     }
 
     @GetMapping("/listing/")
