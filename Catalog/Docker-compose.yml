@@ -6,7 +6,7 @@ services:
     image: catalogservice
     restart: on-failure
     build:
-      dockerfile: ./Dockerfile1
+      dockerfile: catalogService
     ports:
       - "8080:8080"
     links:
@@ -16,7 +16,7 @@ services:
   catalogsql:
     image: catalogsql
     build:
-      dockerfile: Dockerfile
+      dockerfile: CatalogSQL
     networks:
       - main
 networks:
