@@ -1,4 +1,4 @@
-package sdu.se06.account.Entity;
+gpackage sdu.se06.account.Entity;
 
 //import org.springframework.web.bind.annotation.*;
 
