@@ -22,7 +22,7 @@ public class KafkaEventProducer {
     }
 
     public void sendBidRequest(BidRequest bidRequest) {
-        kafkaTemplate.send(topic,Integer.toString(bidRequest.getListingID()), bidRequest);
+        kafkaTemplate.send(topic, bidRequest.getListingID(), bidRequest);
     }
 
     public void sendCatalogBid(BidRequest bidRequest) {
