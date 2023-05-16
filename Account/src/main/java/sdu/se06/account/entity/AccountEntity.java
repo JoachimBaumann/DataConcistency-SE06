@@ -1,4 +1,4 @@
-gpackage sdu.se06.account.Entity;
+package sdu.se06.account.entity;
 
 //import org.springframework.web.bind.annotation.*;
 
@@ -18,7 +18,7 @@ public class AccountEntity {
     private String username;
     private String password;
 
-    private String Email;
+    private String email;
 
     public long getId() {
         return id;
@@ -45,11 +45,11 @@ public class AccountEntity {
     }
 
     public String getEmail() {
-        return Email;
+        return email;
     }
 
     public void setEmail(String email) {
-        Email = email;
+        this.email = email;
     }
 
 }
