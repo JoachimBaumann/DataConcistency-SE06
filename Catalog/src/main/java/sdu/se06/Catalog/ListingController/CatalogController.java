@@ -8,6 +8,7 @@ import sdu.se06.Catalog.Catalog.Listing;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin("*")
 @RequestMapping("/api/v1/")
 @RestController
 public class CatalogController {
@@ -19,7 +20,7 @@ public class CatalogController {
     }
 
     @PostMapping("/listings/")
-    public ResponseEntity<String> createListing(Listing listings) {
+    public ResponseEntity<String> createListing(@RequestBody Listing listings) {
 
         repository.save(listings);
         return ResponseEntity.ok("Data saved");
