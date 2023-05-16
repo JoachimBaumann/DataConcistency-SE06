@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @SpringBootApplication
-@RestController
 public class CatalogApplication {
 
 
@@ -18,9 +17,6 @@ public class CatalogApplication {
 
 
 
-	@GetMapping("/")
-	public List<String> hello() {
-		return List.of("you", "Are", "Smelly");
-	}
+
 
 }

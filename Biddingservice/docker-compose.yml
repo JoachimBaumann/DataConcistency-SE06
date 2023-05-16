@@ -1,32 +1,13 @@
-version: "3.9"
+---
+version: '3'
 services:
-  catalog:
-    depends_on:
-      - catalogsql
-    image: catalogservice
-    restart: on-failure
-    build:
-      dockerfile: catalogService
-    ports:
-      - "8081:8080"
-    links:
-      - "catalogsql:catalogsql"
-    networks:
-      - main
-  catalogsql:
-    image: catalogsql
-    build:
-      dockerfile: CatalogSQL
-    networks:
-      - main
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.2
     container_name: zookeeper
     environment:
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOOKEEPER_TICK_TIME: 2000
-    networks:
-      - main
+
   broker:
     image: confluentinc/cp-kafka:7.3.2
     container_name: broker
@@ -44,9 +25,3 @@ services:
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
-    networks:
-      - main
-
-
-networks:
-  main:

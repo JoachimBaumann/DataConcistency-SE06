@@ -1,11 +1,12 @@
 version: "3.9"
 services:
-  catalog:
+  catalogservice:
     depends_on:
       - catalogsql
     image: catalogservice
     restart: on-failure
     build:
+      context: ./Catalog
       dockerfile: catalogService
     ports:
       - "8081:8080"
@@ -14,9 +15,17 @@ services:
     networks:
       - main
   catalogsql:
-    image: catalogsql
     build:
+      context: ./Catalog
       dockerfile: CatalogSQL
+    networks:
+      - main
+  biddingservice:
+    build:
+      context: ./Biddingservice
+      dockerfile: BiddingService
+    ports:
+      - "8080:8080"
     networks:
       - main
   zookeeper:
