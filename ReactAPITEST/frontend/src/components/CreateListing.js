@@ -75,49 +75,49 @@ const CreateListing = () => {
                 </div>
                 <div className="form-row">
                  <label htmlFor="listingPrice" className="form-label">
-            Listing Price:                
-            </label>
-            <input type="text" 
-            className="form-input" 
-            id="listingPrice" 
-            value={listingPrice}
-            onChange={(e) => setListingPrice(e.target.value)}
-            />
+                Listing Price:                
+                </label>
+                <input type="text" 
+                 className="form-input" 
+                id="listingPrice" 
+                value={listingPrice}
+                onChange={(e) => setListingPrice(e.target.value)}
+                />
+                Y</div>
+            <div className="form-row">
+                <label htmlFor="listingDescription" className="form-label">
+                Listing Description:               
+                </label>
+                <input type="text" 
+                className="form-input" 
+                id="listingDescription" 
+                value={listingDescription}
+                onChange={(e) => setListingDescription(e.target.value)}
+                />
             </div>
             <div className="form-row">
-            <label htmlFor="listingDescription" className="form-label">
-            Listing Description:               
-            </label>
-            <input type="text" 
-            className="form-input" 
-            id="listingDescription" 
-            value={listingDescription}
-            onChange={(e) => setListingDescription(e.target.value)}
+                <label htmlFor="listingCondition" className="form-label">
+                Listing Condition:                
+                </label>
+                <input type="text" 
+                className="form-input" 
+                id="listingCondition" 
+                value={listingCondition}
+                onChange={(e) => setListingCondition(e.target.value)}
             />
             </div>
-            <div className="form-row">
-            <label htmlFor="listingCondition" className="form-label">
-            Listing Condition:                
-            </label>
-            <input type="text" 
-            className="form-input" 
-            id="listingCondition" 
-            value={listingCondition}
-            onChange={(e) => setListingCondition(e.target.value)}
-            />
-            </div>
-            <div className="form-row">
-            <label htmlFor="pictureURL" className="form-label">
+             <div className="form-row">
+             <label htmlFor="pictureURL" className="form-label">
             Images:                
-            </label>
-            <input type="text" 
-            className="form-input" 
-            id="pictureURL" 
-            value={pictureURL}
-            onChange={(e) => setPictureURL(e.target.value)}
+             </label>
+                <input type="text" 
+                className="form-input" 
+                id="pictureURL" 
+             value={pictureURL}
+                onChange={(e) => setPictureURL(e.target.value)}
             />
             </div>
-            <button>click me</button>
+            <button>Click me</button>
             </form>
         </section>
     )

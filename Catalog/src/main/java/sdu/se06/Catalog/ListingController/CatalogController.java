@@ -42,4 +42,6 @@ public class CatalogController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
 }
