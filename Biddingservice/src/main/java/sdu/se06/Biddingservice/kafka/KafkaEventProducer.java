@@ -12,7 +12,7 @@ public class KafkaEventProducer {
 
     private final KafkaTemplate<Integer, BidRequest> kafkaTemplate;
 
-    @Value("${kafka.topic}")
+    @Value("${kafka.topic.new.bid}")
     private String topic;
     private String topic2 = "Catalog-topic";
     private String accountTopic = "Account-topic";

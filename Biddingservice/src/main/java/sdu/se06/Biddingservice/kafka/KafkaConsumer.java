@@ -22,13 +22,13 @@ public class KafkaConsumer {
             kafkaEventProducer.sendAccountMessage(bidRequest);
         } else {
             System.out.println("Error");
-            //bidRequest.setCatalogBidRequestState(BidRequestState.ROLLBACK);
-        }
+            bidRequest.setCatalogBidRequestState(BidRequestState.ROLLBACK);
+                    }
     }
 
 
     // New bids
-    @KafkaListener(topics = "${kafka.topic}", groupId = "${spring.kafka.consumer.group-id}")
+    @KafkaListener(topics = "${kafka.topic.new.bid}", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeBiddingMessage(BidRequest bidRequest) {
         System.out.println("Received message: " + bidRequest);
         // Process event

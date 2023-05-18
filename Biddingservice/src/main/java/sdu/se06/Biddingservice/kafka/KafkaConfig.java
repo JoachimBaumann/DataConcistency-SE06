@@ -12,12 +12,20 @@ import sdu.se06.auctioncommon.Model.BidRequest;
 @Configuration
 public class KafkaConfig {
 
-    @Value("${kafka.topic}")
-    private String topic;
+    @Value("${kafka.topic.new.bid}")
+    private String newBidTopic;
+
+    @Value("{kafka.topic.account.processed}")
+    private String accountRequestTopic;
 
     @Bean
-    public NewTopic bidRequestTopic() {
-        return TopicBuilder.name(topic).partitions(2).build();
+    public NewTopic newbidRequestTopic() {
+        return TopicBuilder.name(newBidTopic).partitions(2).build();
+    }
+
+    @Bean
+    public NewTopic accountProcessedTopic() {
+        return TopicBuilder.name(accountRequestTopic).partitions(1).build();
     }
 
     @Bean
