@@ -21,9 +21,9 @@ const Navbar = ({ setSelectedUserID }) => {
         <li className="select-styling">
           <select name="users" id="user-select" onChange={handleSelectChange}>
             <option value="">--Choose user--</option>
-            <option value="lars">Lars</option>
-            <option value="lone">Lone</option>
-            <option value="lotte">Lotte</option>
+            <option value="1">Lars</option>
+            <option value="2">Lone</option>
+            <option value="3">Lotte</option>
           </select>
         </li>
       </ul>
