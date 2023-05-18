@@ -54,8 +54,24 @@
 			<artifactId>mysql-connector-java</artifactId>
 			<version>8.0.32</version>
 		</dependency>
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>sdu.se06</groupId>
+            <artifactId>auction-common</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
+        </dependency>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>RELEASE</version>
+			<scope>compile</scope>
+		</dependency>
 
-	</dependencies>
+    </dependencies>
 
 	<build>
 		<plugins>

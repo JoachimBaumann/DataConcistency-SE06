@@ -17,10 +17,11 @@ public class AccountEntity {
     private int id;
     private String username;
     private String password;
+    private double balance;
 
     private String email;
 
-    public long getId() {
+    public int getId() {
         return id;
     }
 
@@ -52,4 +53,11 @@ public class AccountEntity {
         this.email = email;
     }
 
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
 }
