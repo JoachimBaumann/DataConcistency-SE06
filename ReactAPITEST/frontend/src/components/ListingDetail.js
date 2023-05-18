@@ -1,15 +1,17 @@
 
-import React, {Component, useState} from "react";
+import React, {Component, useState, useContext} from "react";
 import { useEffect } from "react";
 import axios from "axios";
 import Catalog from "./Catalog";
 import { useLocation } from 'react-router-dom'
+import UserContext from "./UserContext";
 
 function ListingDetail () {
 
   const { state } = useLocation()
   const { id } = state;
   console.log(id);
+  const selectedUserID = useContext(UserContext);
 
   const [listing, setListing] = useState("")
 

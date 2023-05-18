@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState, useContext} from "react";
 import axios from "axios";
+import UserContext from "./UserContext";
 
 
 const CreateListing = () => {
@@ -12,6 +13,12 @@ const CreateListing = () => {
     const[listingDescription, setListingDescription] = useState("");
     const[listingCondition, setListingCondition] = useState("");
     const[pictureURL, setPictureURL] = useState("");
+    const selectedUserID = useContext(UserContext); // Access the selectedUserID from context
+    const [currentUserID, setCurrentUserID] = useState("");
+  
+    useEffect(() => {
+      setCurrentUserID(selectedUserID);
+    }, [selectedUserID]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
@@ -21,7 +28,8 @@ const CreateListing = () => {
             listingPrice, 
             listingDescription, 
             listingCondition, 
-            pictureURL
+            pictureURL,
+            currentUserID
             );
 
         try{
@@ -42,31 +50,31 @@ const CreateListing = () => {
     return (
         <section>
             <h2 className="text-center">Create Listing</h2>
-            <form className="form" onSubmit={handleSubmit}>
-            <div className="form-row">
-            <label htmlFor="listingName" className="form-label">
-            Listing Name:                 
-            </label>
-            <input type="text" 
-            className="form-input" 
-            id="listingName" 
-            value={listingName}
-            onChange={(e) => setListingName(e.target.value)}
-            />
-            </div>
-            <div className="form-row">
-            <label htmlFor="closed" className="form-label">
-            Listing Status:                 
-            </label>
-            <input type="closed" 
-            className="form-input" 
-            id="closed" 
-            value={closed}
-            onChange={(e) => setClosed(e.target.value)}
-            />
-            </div>
-            <div className="form-row">
-            <label htmlFor="listingPrice" className="form-label">
+                <form className="form" onSubmit={handleSubmit}>
+                    <div className="form-row">
+                        <label htmlFor="listingName" className="form-label">
+                        Listing Name:                 
+                        </label>
+                <input type="text" 
+                className="form-input" 
+                id="listingName" 
+                value={listingName}
+                onChange={(e) => setListingName(e.target.value)}
+                />
+                    </div>
+                <div className="form-row">
+                    <label htmlFor="closed" className="form-label">
+                    Listing Status:                 
+                    </label>
+                    <input type="closed" 
+                    className="form-input" 
+                    id="closed" 
+                    value={closed}
+                    onChange={(e) => setClosed(e.target.value)}
+                />
+                </div>
+                <div className="form-row">
+                 <label htmlFor="listingPrice" className="form-label">
             Listing Price:                
             </label>
             <input type="text" 

@@ -9,8 +9,8 @@
         <outputRelativeToContentRoot value="true" />
         <module name="Account" />
         <module name="Biddingservice" />
-        <module name="Catalog" />
         <module name="auction-common" />
+        <module name="Catalog" />
       </profile>
     </annotationProcessing>
   </component>
