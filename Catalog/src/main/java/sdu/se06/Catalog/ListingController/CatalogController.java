@@ -3,7 +3,7 @@ package sdu.se06.Catalog.ListingController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import sdu.se06.Catalog.Catalog.Listing;
+import sdu.se06.Catalog.model.Listing;
 
 import java.util.List;
 import java.util.Optional;
@@ -18,6 +18,8 @@ public class CatalogController {
         this.repository = repository;
     }
 
+
+
     @PostMapping("/listings/")
     public ResponseEntity<String> createListing(Listing listings) {
 
@@ -31,6 +33,12 @@ public class CatalogController {
         return repository.findAll();
     }
 
+    @GetMapping("/test")
+    public String createListing() {
+        repository.save(new Listing(1, "Test", false, 10, "nice", "poor", "http://phillipIgstreng.dk"));
+        return "created";
+    }
+
     @GetMapping(value = "/listing/{id}")
     public ResponseEntity<Listing> getListing(@PathVariable("id") int id) {
         Optional<Listing> listingData = repository.findById(id);
@@ -41,4 +49,6 @@ public class CatalogController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+
 }

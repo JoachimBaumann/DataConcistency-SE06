@@ -17,7 +17,7 @@ public class KafkaConfig {
 
     @Bean
     public NewTopic bidRequestTopic() {
-        return TopicBuilder.name(topic).build();
+        return TopicBuilder.name(topic).partitions(2).build();
     }
 
     @Bean

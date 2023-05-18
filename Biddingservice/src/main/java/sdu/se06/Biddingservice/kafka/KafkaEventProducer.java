@@ -10,22 +10,22 @@ import sdu.se06.auctioncommon.Model.BidRequest;
 @Component
 public class KafkaEventProducer {
 
-    private final KafkaTemplate<String, BidRequest> kafkaTemplate;
+    private final KafkaTemplate<Integer, BidRequest> kafkaTemplate;
 
     @Value("${kafka.topic}")
     private String topic;
     private String topic2 = "Catalog-topic";
 
     @Autowired
-    public KafkaEventProducer(KafkaTemplate<String, BidRequest> kafkaTemplate) {
+    public KafkaEventProducer(KafkaTemplate<Integer, BidRequest> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
     }
 
     public void sendBidRequest(BidRequest bidRequest) {
-        kafkaTemplate.send(topic,Integer.toString(bidRequest.getListingID()), bidRequest);
+        kafkaTemplate.send(topic,bidRequest.getListingID(), bidRequest);
     }
 
     public void sendCatalogBid(BidRequest bidRequest) {
-        kafkaTemplate.send(topic2,Integer.toString(bidRequest.getListingID()), bidRequest);
+        kafkaTemplate.send(topic2,bidRequest.getListingID(), bidRequest);
     }
 }

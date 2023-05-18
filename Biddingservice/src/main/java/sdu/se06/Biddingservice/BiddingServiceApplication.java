@@ -29,7 +29,7 @@ public class BiddingServiceApplication {
 
     @GetMapping("/test")
     private void postBid() {
-        kafkaEventProducer.sendBidRequest(new BidRequest(50,2,1.0,new Date(LocalDate.now().toEpochDay())));
+        kafkaEventProducer.sendBidRequest(new BidRequest(1,2,20.0,new Date(LocalDate.now().toEpochDay())));
     }
 
 

@@ -17,7 +17,6 @@ public class KafkaConsumer {
     public void consumeMessage(BidRequest bidRequest) {
         System.out.println("Received message: " + bidRequest);
         // Process event
-        bidRequest.setAccountbidRequestState(BidRequestState.APPROVED);
         kafkaEventProducer.sendCatalogBid(bidRequest);
 
     }

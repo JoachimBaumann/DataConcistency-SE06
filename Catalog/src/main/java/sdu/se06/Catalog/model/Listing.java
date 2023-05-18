@@ -1,4 +1,4 @@
-package sdu.se06.Catalog.Catalog;
+package sdu.se06.Catalog.model;
 
 import jakarta.persistence.*;
 import lombok.Getter;
@@ -22,6 +22,15 @@ public class Listing {
     private String ListingCondition;
     private String pictureURL;
 
+    public Listing(int sellerID, String listingName, boolean closed, double listingPrice, String listingDescription, String listingCondition, String pictureURL) {
+        this.sellerID = sellerID;
+        this.listingName = listingName;
+        this.closed = closed;
+        this.listingPrice = listingPrice;
+        ListingDescription = listingDescription;
+        ListingCondition = listingCondition;
+        this.pictureURL = pictureURL;
+    }
 }
 
 
