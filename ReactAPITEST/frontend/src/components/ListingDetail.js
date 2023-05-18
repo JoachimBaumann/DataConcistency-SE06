@@ -16,10 +16,19 @@ function ListingDetail () {
 
   //post URL
   //INSERT POST URL ONCE MADE.
-  const url = ""
+  const url = "http://localhost:8080/bid/newbid"
+
 
   //current user ID
-  const selectedUserID = useContext(UserContext);
+  const currentUser = useContext(UserContext);
+
+  const [selectedUserID, setSelectedUserID] = useState("")
+
+  switch(currentUser){
+    case "Lone": setSelectedUserID(1);
+    case "Lars": setSelectedUserID(2);
+    case "Lotte": setSelectedUserID(3);
+    }
 
   //ID from selected item mapped to variable
   const listingID = useState({id});
@@ -31,15 +40,18 @@ function ListingDetail () {
   const handleSubmit = async (e) => {
     e.preventDefault();
     console.log(
+      "UserID: ",
       selectedUserID,
+      "ListingID: ",
       listingID,
+      "bid: ",
       bid
     )
     try{
       const resp = await axios.post(url, {
         userID: selectedUserID,
         listingID: listingID,
-        bid: bid
+        amount: bid
       });
       console.log(resp.data)
     } catch(error){
