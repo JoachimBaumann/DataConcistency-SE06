@@ -34,7 +34,6 @@ public class KafkaConsumer {
             AccountEntity account = accountData.get();
             if (account.getBalance() >= bidRequest.getAmount()) {
                 account.setBalance(account.getBalance() - bidRequest.getAmount());
-                account.setBalance(account.getBalance() - bidRequest.getAmount());
                 bidRequest.setAccountbidRequestState(BidRequestState.APPROVED);
                 repository.save(account);
                 System.out.println("Account confirmed and balance reserved");
