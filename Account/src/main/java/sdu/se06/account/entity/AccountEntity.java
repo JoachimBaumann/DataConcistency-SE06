@@ -9,7 +9,15 @@ import jakarta.persistence.Id;
 //This annotation specifies this class as a JPA entity, making sure that these values are mapped to the SQL database
 @Entity
 public class AccountEntity {
+    public AccountEntity() {
+    }
 
+    public AccountEntity(String username, String password, double balance, String email) {
+        this.username = username;
+        this.password = password;
+        this.balance = balance;
+        this.email = email;
+    }
 
     // Annotation sets ID as primary Key
     @Id

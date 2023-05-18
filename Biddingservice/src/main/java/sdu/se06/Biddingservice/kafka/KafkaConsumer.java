@@ -18,12 +18,12 @@ public class KafkaConsumer {
     public void consumeCatalogMessage(BidRequest bidRequest) {
         // Process event
 
-        if(bidRequest.getCatalogBidRequestState().equals(BidRequestState.APPROVED)) {
+        if (bidRequest.getCatalogBidRequestState().equals(BidRequestState.APPROVED)) {
             kafkaEventProducer.sendAccountMessage(bidRequest);
         } else {
-            System.out.println("Error");
+            // TODO Process event implement rollback.
             bidRequest.setCatalogBidRequestState(BidRequestState.ROLLBACK);
-                    }
+        }
     }
 
 
@@ -31,7 +31,8 @@ public class KafkaConsumer {
     @KafkaListener(topics = "${kafka.topic.new.bid}", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeBiddingMessage(BidRequest bidRequest) {
         System.out.println("Received message: " + bidRequest);
-        // Process event
+
+        // TODO Process event
         kafkaEventProducer.sendCatalogBid(bidRequest);
 
     }
@@ -39,7 +40,9 @@ public class KafkaConsumer {
     @KafkaListener(topics = "${kafka.topic.account.processed}", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeAccountProcessed(BidRequest bidRequest) {
         System.out.println("Received from account processed: " + bidRequest);
-        // Process event
+        // TODO Process event
+
+
         //kafkaEventProducer.sendCatalogBid(bidRequest);
 
     }

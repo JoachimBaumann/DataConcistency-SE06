@@ -33,33 +33,26 @@ public class KafkaConsumer {
 
     private BidRequest verifyNewBid(BidRequest bidRequest) {
 
-        try {
 
+        // VERIFY LISTING INFORMATION
 
-            // VERIFY LISTING INFORMATION
+        Optional<Listing> listingData = repository.findById(bidRequest.getListingID());
 
-            Optional<Listing> listingData = repository.findById(bidRequest.getListingID());
-
-            if (listingData.isPresent()) {
-                // Check price
-                if (listingData.get().getListingPrice() * bidmultiplier <= bidRequest.getAmount()) {
-                    bidRequest.setCatalogBidRequestState(BidRequestState.APPROVED);
-                    System.out.println("this should be sent: " + bidRequest);
-                    return bidRequest;
-                }
-            } else {
-                //reject if price is below allowed
-                bidRequest.setCatalogBidRequestState(BidRequestState.REJECTED);
-                System.out.println("Data not present for bid: " + bidRequest);
+        if (listingData.isPresent()) {
+            // Check price
+            if (listingData.get().getListingPrice() * bidmultiplier <= bidRequest.getAmount()) {
+                bidRequest.setCatalogBidRequestState(BidRequestState.APPROVED);
+                System.out.println("this should be sent: " + bidRequest);
                 return bidRequest;
             }
+        } else {
+            //reject if price is below allowed
             bidRequest.setCatalogBidRequestState(BidRequestState.REJECTED);
-            return bidRequest;
-        } catch (Exception e) {
-            System.out.println("Something went wrong");
-            bidRequest.setCatalogBidRequestState(BidRequestState.REJECTED);
+            System.out.println("Data not present for bid: " + bidRequest);
             return bidRequest;
         }
-
+        bidRequest.setCatalogBidRequestState(BidRequestState.REJECTED);
+        return bidRequest;
     }
+
 }
