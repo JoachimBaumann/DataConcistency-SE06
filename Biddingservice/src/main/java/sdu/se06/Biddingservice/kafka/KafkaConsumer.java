@@ -13,8 +13,23 @@ public class KafkaConsumer {
     @Autowired
     private KafkaEventProducer kafkaEventProducer;
 
+    // Catalog processed
+    @KafkaListener(topics = "Catalog-processed-topic", groupId = "${spring.kafka.consumer.group-id}")
+    public void consumeCatalogMessage(BidRequest bidRequest) {
+        // Process event
+
+        if(bidRequest.getCatalogBidRequestState().equals(BidRequestState.APPROVED)) {
+            kafkaEventProducer.sendAccountMessage(bidRequest);
+        } else {
+            System.out.println("Error");
+            //bidRequest.setCatalogBidRequestState(BidRequestState.ROLLBACK);
+        }
+    }
+
+
+    // New bids
     @KafkaListener(topics = "${kafka.topic}", groupId = "${spring.kafka.consumer.group-id}")
-    public void consumeMessage(BidRequest bidRequest) {
+    public void consumeBiddingMessage(BidRequest bidRequest) {
         System.out.println("Received message: " + bidRequest);
         // Process event
         kafkaEventProducer.sendCatalogBid(bidRequest);
@@ -25,7 +40,7 @@ public class KafkaConsumer {
     public void consumeAccountProcessed(BidRequest bidRequest) {
         System.out.println("Received from account processed: " + bidRequest);
         // Process event
-        kafkaEventProducer.sendCatalogBid(bidRequest);
+        //kafkaEventProducer.sendCatalogBid(bidRequest);
 
     }
 }

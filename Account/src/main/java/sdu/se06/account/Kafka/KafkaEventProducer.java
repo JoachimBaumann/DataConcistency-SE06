@@ -12,8 +12,8 @@ public class KafkaEventProducer {
 
     @Value("kafka.topic.new")
     private String topic;
-    @Value("Kafka.topic.processed")
-    private String topic2;
+
+    private String topic2 = "Account-processed-topic";
 
 
 
