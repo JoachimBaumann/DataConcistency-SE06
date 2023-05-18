@@ -1,5 +1,6 @@
 version: "3.9"
 services:
+## CATALOG
   catalogservice:
     depends_on:
       - catalogsql
@@ -15,11 +16,36 @@ services:
     networks:
       - main
   catalogsql:
-    build:
-      context: ./Catalog
-      dockerfile: CatalogSQL
+    image: mysql
     networks:
       - main
+    environment:
+      MYSQL_ROOT_PASSWORD: "se06"
+      MYSQL_DATABASE: "CatalogDB"
+
+##  ACCOUNT
+  accountservice:
+    build:
+      context: ./Account
+      dockerfile: Account-Docker
+    depends_on:
+      - accountsql
+    ports:
+      - "8082:8080"
+    networks:
+      - main
+    links:
+      - "accountsql:accountsql"
+  accountsql:
+    image: mysql
+    networks:
+     - main
+    environment:
+      MYSQL_ROOT_PASSWORD: "se06"
+      MYSQL_DATABASE: "accountDB"
+
+
+  ## BIDDING
   biddingservice:
     build:
       context: ./Biddingservice
@@ -28,6 +54,8 @@ services:
       - "8080:8080"
     networks:
       - main
+
+##KAFKA
   zookeeper:
     image: confluentinc/cp-zookeeper:7.3.2
     container_name: zookeeper

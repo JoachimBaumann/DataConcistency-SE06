@@ -13,8 +13,8 @@ public class KafkaEventProducer {
 
     @Value("kafka.topic.new")
     private String topic;
-    @Value("Kafka.topic.processed")
-    private String topic2;
+
+    private String topic2 = "Catalog-processed-topic";
 
 
     public KafkaEventProducer(KafkaTemplate<Integer, BidRequest> kafkaTemplate) {

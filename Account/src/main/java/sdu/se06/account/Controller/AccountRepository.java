@@ -5,6 +5,6 @@ import org.springframework.stereotype.Repository;
 import sdu.se06.account.entity.AccountEntity;
 
 @Repository
-public interface AccountRepository extends JpaRepository<AccountEntity, Long> {
+public interface AccountRepository extends JpaRepository<AccountEntity, Integer> {
 
 }

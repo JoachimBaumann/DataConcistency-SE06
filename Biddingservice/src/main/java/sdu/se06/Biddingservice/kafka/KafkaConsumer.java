@@ -20,4 +20,12 @@ public class KafkaConsumer {
         kafkaEventProducer.sendCatalogBid(bidRequest);
 
     }
+
+    @KafkaListener(topics = "${kafka.topic.account.processed}", groupId = "${spring.kafka.consumer.group-id}")
+    public void consumeAccountProcessed(BidRequest bidRequest) {
+        System.out.println("Received from account processed: " + bidRequest);
+        // Process event
+        kafkaEventProducer.sendCatalogBid(bidRequest);
+
+    }
 }

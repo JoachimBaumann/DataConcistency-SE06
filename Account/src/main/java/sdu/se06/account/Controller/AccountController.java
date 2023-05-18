@@ -33,7 +33,7 @@ public class AccountController {
     }
 
     @GetMapping("/{id}")
-    public AccountEntity getAccount(@PathVariable Long id){
+    public AccountEntity getAccount(@PathVariable int id){
         return repository.findById(id).orElseThrow(RuntimeException::new);
     }
 

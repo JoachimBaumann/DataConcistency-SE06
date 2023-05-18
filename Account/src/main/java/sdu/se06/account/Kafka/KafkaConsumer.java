@@ -21,15 +21,14 @@ public class KafkaConsumer {
 
     @KafkaListener(topics = "${kafka.topic.new}", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeMessage(BidRequest bidRequest){
-        verifyBidRequest(bidRequest);
-        kafkaEventProducer.sendProcessedRequest(bidRequest);
+
+        kafkaEventProducer.sendProcessedRequest(verifyBidRequest(bidRequest));
 
     }
 
     private BidRequest verifyBidRequest(BidRequest bidRequest) {
-        repository.findById((long) bidRequest.getUserID());
 
-        Optional<AccountEntity> accountData = repository.findById((long) bidRequest.getUserID());
+        Optional<AccountEntity> accountData = repository.findById(bidRequest.getUserID());
 
         if (accountData.isPresent()) {
             AccountEntity account = accountData.get();
