@@ -18,14 +18,22 @@ public class KafkaConfig {
     @Value("{kafka.topic.account.processed}")
     private String accountRequestTopic;
 
+    @Value("${kafka.topic.Catalog.processed}")
+    private String catalogProcessedTopic;
+
     @Bean
     public NewTopic newbidRequestTopic() {
-        return TopicBuilder.name(newBidTopic).partitions(2).build();
+        return TopicBuilder.name(newBidTopic).partitions(4).build();
     }
 
     @Bean
     public NewTopic accountProcessedTopic() {
-        return TopicBuilder.name(accountRequestTopic).partitions(1).build();
+        return TopicBuilder.name(accountRequestTopic).partitions(4).build();
+    }
+
+    @Bean
+    public NewTopic catalogProcessedTopic() {
+        return TopicBuilder.name(catalogProcessedTopic).partitions(4).build();
     }
 
     @Bean

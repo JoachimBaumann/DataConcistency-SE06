@@ -17,6 +17,8 @@ public class KafkaEventProducer {
     private String topic2 = "Catalog-topic";
     private String accountTopic = "Account-topic";
 
+    private String updateCatalogTopic = "Catalog-update-topic";
+
     @Autowired
     public KafkaEventProducer(KafkaTemplate<Integer, BidRequest> kafkaTemplate) {
         this.kafkaTemplate = kafkaTemplate;
@@ -24,6 +26,10 @@ public class KafkaEventProducer {
 
     public void sendBidRequest(BidRequest bidRequest) {
         kafkaTemplate.send(topic,bidRequest.getListingID(), bidRequest);
+    }
+
+    public void sendUpdateCatalog(BidRequest bidRequest) {
+        kafkaTemplate.send(updateCatalogTopic,bidRequest.getListingID(),bidRequest);
     }
 
     public void sendAccountMessage(BidRequest bidRequest) {

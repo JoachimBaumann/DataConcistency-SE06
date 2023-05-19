@@ -28,6 +28,25 @@ public class KafkaConsumer {
         kafkaEventProducer.sendProcessedbidRequest(newBidRequest);
     }
 
+    @KafkaListener(topics = "${kafka.topic.update}")
+    public void consumeUpdateCatalog(BidRequest bidRequest) {
+        Optional<Listing> listingData = repository.findById(bidRequest.getListingID());
+
+        //TODO add rest of method
+        if(listingData.isPresent()) {
+            Listing listing = listingData.get();
+
+            listing.setListingPrice(bidRequest.getAmount());
+            repository.save(listing);
+            System.out.println("Updated price in catalog from bid: " + bidRequest);
+            bidRequest.setSource("Catalog Updated");
+            kafkaEventProducer.sendBidSagaDone(bidRequest);
+        } else {
+            bidRequest.setAccountbidRequestState(BidRequestState.ROLLBACK);
+            kafkaEventProducer.sendBidSagaDone(bidRequest);
+        }
+    }
+
 
     private BidRequest verifyNewBid(BidRequest bidRequest) {
 
