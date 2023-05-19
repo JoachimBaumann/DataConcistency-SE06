@@ -17,7 +17,7 @@ public class KafkaConsumer {
     @KafkaListener(topics = "Catalog-processed-topic", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeCatalogMessage(BidRequest bidRequest) {
         // Process event
-
+        System.out.println("Event from Catalog-processed-topic" + bidRequest);
         if (bidRequest.getCatalogBidRequestState().equals(BidRequestState.APPROVED)) {
             kafkaEventProducer.sendAccountMessage(bidRequest);
         } else {
@@ -30,7 +30,7 @@ public class KafkaConsumer {
     // New bids
     @KafkaListener(topics = "${kafka.topic.new.bid}", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeBiddingMessage(BidRequest bidRequest) {
-        System.out.println("Received message: " + bidRequest);
+        System.out.println("Event from NewBid topic: " + bidRequest);
 
         // TODO Process event
         kafkaEventProducer.sendCatalogBid(bidRequest);
@@ -39,7 +39,7 @@ public class KafkaConsumer {
 
     @KafkaListener(topics = "${kafka.topic.account.processed}", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeAccountProcessed(BidRequest bidRequest) {
-        System.out.println("Received from account processed: " + bidRequest);
+        System.out.println("Event from account processed topic: " + bidRequest);
         // TODO Process event
 
 

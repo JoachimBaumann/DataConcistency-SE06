@@ -1,12 +1,10 @@
 package sdu.se06.Catalog.Kafka;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
-import sdu.se06.Catalog.model.Listing;
 import sdu.se06.Catalog.ListingController.CatalogRepository;
+import sdu.se06.Catalog.model.Listing;
 import sdu.se06.auctioncommon.Model.BidRequest;
 import sdu.se06.auctioncommon.Model.BidRequestState;
 
@@ -42,13 +40,11 @@ public class KafkaConsumer {
             // Check price
             if (listingData.get().getListingPrice() * bidmultiplier <= bidRequest.getAmount()) {
                 bidRequest.setCatalogBidRequestState(BidRequestState.APPROVED);
-                System.out.println("this should be sent: " + bidRequest);
                 return bidRequest;
             }
         } else {
             //reject if price is below allowed
             bidRequest.setCatalogBidRequestState(BidRequestState.REJECTED);
-            System.out.println("Data not present for bid: " + bidRequest);
             return bidRequest;
         }
         bidRequest.setCatalogBidRequestState(BidRequestState.REJECTED);
