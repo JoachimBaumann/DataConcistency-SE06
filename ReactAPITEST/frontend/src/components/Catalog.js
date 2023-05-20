@@ -8,7 +8,7 @@ function Catalog(){
     const [listings, setListings] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:8080/api/v1/listings/")
+        axios.get("http://localhost:8081/api/v1/listings/")
         .then(response => {
             setListings(response.data);
         })

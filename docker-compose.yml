@@ -44,6 +44,14 @@ services:
       MYSQL_ROOT_PASSWORD: "se06"
       MYSQL_DATABASE: "accountDB"
 
+  nginx:
+    build:
+      context: ./Nginx
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    networks:
+      - main
 
   ## BIDDING
   biddingservice:
