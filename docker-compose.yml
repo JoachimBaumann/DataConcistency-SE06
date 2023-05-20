@@ -1,5 +1,14 @@
 version: "3.9"
 services:
+  ## FRONTEND
+  reactservice:
+    build:
+      context: ReactAPITEST/frontend
+      dockerfile: reactdocker
+    ports:
+      - "3000:3000"
+    networks:
+      - client
   ## CATALOG
   catalogservice:
     depends_on:
@@ -52,6 +61,7 @@ services:
       - "8080:8080"
     networks:
       - main
+      - client
 
   ## BIDDING
   biddingservice:
@@ -92,3 +102,4 @@ services:
 
 networks:
   main:
+  client:
