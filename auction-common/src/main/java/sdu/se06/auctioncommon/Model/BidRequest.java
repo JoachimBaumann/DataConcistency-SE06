@@ -24,12 +24,4 @@ public class BidRequest {
     public BidRequestState sagaStatus = BidRequestState.CREATED;
 
 
-
-    public BidRequest(int listingID, int userID, double amount, Date time) {
-        this.listingID = listingID;
-        this.userID = userID;
-        this.amount = amount;
-        this.time = time;
-        source = "";
-    }
 }
