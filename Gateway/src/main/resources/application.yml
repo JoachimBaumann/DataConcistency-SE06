@@ -1,0 +1,33 @@
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: frontend_to_catalog_listing_post_route
+          uri: http://localhost:8081
+          predicates:
+            - Method=POST, GET
+            - Path=/api/v1/listings/**
+
+        - id: frontend_to_catalog_listing_get_route
+          uri: http://localhost:8081
+          predicates:
+            - Method=GET
+            - Path=/api/v1/listing/**
+
+        - id: create_account_post
+          uri: http://localhost:8080
+          predicates:
+            - METHOD=POST
+            - Path=/accounts/
+
+        - id: create_account_post
+          uri: http://localhost:8080
+          predicates:
+            - METHOD=POST
+            - Path=/accounts/
+
+        - id: new_bid_post
+          uri: http://localhost:8080
+          predicates:
+            - METHOD=POST
+            - Path=/bid/newbid
