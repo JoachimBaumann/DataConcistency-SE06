@@ -26,6 +26,25 @@ public class KafkaConsumer {
 
     }
 
+    @KafkaListener(topics = "${kafka.bid-rejected-topic}", groupId = "${spring.kafka.consumer.group-id}")
+    public void consumeRejectedBids(BidRequest bidRequest){
+
+        rollBack(bidRequest);
+
+    }
+
+    private void rollBack(BidRequest bidRequest) {
+        if(bidRequest.getAccountbidRequestState().equals(BidRequestState.APPROVED) && bidRequest.getSagaStatus().equals(BidRequestState.ROLLBACK)) {
+            Optional<AccountEntity> accountData = repository.findById(bidRequest.getUserID());
+            if(accountData.isPresent()) {
+                AccountEntity account = accountData.get();
+
+                account.setBalance(account.getBalance() + bidRequest.getAmount());
+                repository.save(account);
+            }
+        }
+    }
+
     private BidRequest verifyBidRequest(BidRequest bidRequest) {
 
         Optional<AccountEntity> accountData = repository.findById(bidRequest.getUserID());
@@ -48,4 +67,5 @@ public class KafkaConsumer {
         bidRequest.setSource("Account not found!");
         return bidRequest;
     }
+
 }

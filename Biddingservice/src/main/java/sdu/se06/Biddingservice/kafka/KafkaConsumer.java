@@ -39,8 +39,6 @@ public class KafkaConsumer {
     @KafkaListener(topics = "${kafka.topic.account.processed}", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeAccountProcessed(BidRequest bidRequest) {
         System.out.println("Event from account processed topic: " + bidRequest);
-        // TODO Process event
-
         // IF Both approved
         if (bidRequest.getCatalogBidRequestState().equals(BidRequestState.APPROVED) && bidRequest.getAccountbidRequestState().equals(BidRequestState.APPROVED)) {
             // Update catalog
@@ -50,10 +48,6 @@ public class KafkaConsumer {
             bidRequest.setSagaStatus(BidRequestState.REJECTED);
             kafkaEventProducer.sendBidRejected(bidRequest);
         }
-
-
-        //kafkaEventProducer.sendCatalogBid(bidRequest);
-
     }
 
 

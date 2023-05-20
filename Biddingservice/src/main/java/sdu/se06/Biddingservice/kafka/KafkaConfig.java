@@ -21,9 +21,16 @@ public class KafkaConfig {
     @Value("${kafka.topic.Catalog.processed}")
     private String catalogProcessedTopic;
 
+    private final String bidApproved = "bid-approved-topic";
+
     @Bean
     public NewTopic newbidRequestTopic() {
         return TopicBuilder.name(newBidTopic).partitions(4).build();
+    }
+
+    @Bean
+    NewTopic bidApprovedTopic() {
+        return TopicBuilder.name(bidApproved).partitions(4).build();
     }
 
     @Bean
