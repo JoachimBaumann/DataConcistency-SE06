@@ -15,7 +15,7 @@ function ListingDetail () {
 
   //post URL
   //INSERT POST URL ONCE MADE.
-  const url = "http://localhost:8080/bid/newbid"
+  const url = "http://localhost:8083/bid/newbid"
 
 
   //current user ID
