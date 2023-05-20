@@ -40,10 +40,12 @@ public class KafkaConsumer {
                 return bidRequest;
             } else {
                 bidRequest.setAccountbidRequestState(BidRequestState.REJECTED);
+                bidRequest.setSource("Insufficient funds");
                 return bidRequest;
             }
         }
         bidRequest.setAccountbidRequestState(BidRequestState.REJECTED);
+        bidRequest.setSource("Account not found!");
         return bidRequest;
     }
 }

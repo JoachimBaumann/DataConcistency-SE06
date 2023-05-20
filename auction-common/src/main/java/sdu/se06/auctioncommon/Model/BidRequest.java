@@ -21,6 +21,8 @@ public class BidRequest {
 
     public BidRequestState accountbidRequestState = BidRequestState.CREATED;
     public BidRequestState catalogBidRequestState = BidRequestState.CREATED;
+    public BidRequestState sagaStatus = BidRequestState.CREATED;
+
 
 
     public BidRequest(int listingID, int userID, double amount, Date time) {

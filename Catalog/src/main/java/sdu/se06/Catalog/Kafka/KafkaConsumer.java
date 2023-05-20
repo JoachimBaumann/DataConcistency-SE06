@@ -21,29 +21,34 @@ public class KafkaConsumer {
 
     private final double bidmultiplier = 1.1;
 
-
+    // New bid verification
     @KafkaListener(topics = "${kafka.topic.new}", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeMessage(BidRequest bidRequest) {
-        BidRequest newBidRequest = verifyNewBid(bidRequest);
-        kafkaEventProducer.sendProcessedbidRequest(newBidRequest);
+        kafkaEventProducer.sendProcessedbidRequest(verifyNewBid(bidRequest));
     }
 
+    // Response from Orchestrator to update price
     @KafkaListener(topics = "${kafka.topic.update}")
     public void consumeUpdateCatalog(BidRequest bidRequest) {
+        kafkaEventProducer.sendCatalogComplete(updateCatalog(bidRequest));
+    }
+
+
+
+    private BidRequest updateCatalog(BidRequest bidRequest) {
         Optional<Listing> listingData = repository.findById(bidRequest.getListingID());
 
-        //TODO add rest of method
-        if(listingData.isPresent()) {
+        if (listingData.isPresent()) {
             Listing listing = listingData.get();
 
             listing.setListingPrice(bidRequest.getAmount());
             repository.save(listing);
             System.out.println("Updated price in catalog from bid: " + bidRequest);
-            bidRequest.setSource("Catalog Updated");
-            kafkaEventProducer.sendBidSagaDone(bidRequest);
+            return bidRequest;
         } else {
-            bidRequest.setAccountbidRequestState(BidRequestState.ROLLBACK);
-            kafkaEventProducer.sendBidSagaDone(bidRequest);
+            bidRequest.setSource("Catalog update error");
+            bidRequest.setCatalogBidRequestState(BidRequestState.REJECTED);
+            return bidRequest;
         }
     }
 
@@ -60,13 +65,15 @@ public class KafkaConsumer {
             if (listingData.get().getListingPrice() * bidmultiplier <= bidRequest.getAmount()) {
                 bidRequest.setCatalogBidRequestState(BidRequestState.APPROVED);
                 return bidRequest;
+            } else {
+                //reject if price is below allowed
+                bidRequest.setCatalogBidRequestState(BidRequestState.REJECTED);
+                bidRequest.setSource("Bid amount not sufficient");
+                return bidRequest;
             }
-        } else {
-            //reject if price is below allowed
-            bidRequest.setCatalogBidRequestState(BidRequestState.REJECTED);
-            return bidRequest;
         }
         bidRequest.setCatalogBidRequestState(BidRequestState.REJECTED);
+        bidRequest.setSource("Listing doesnt exist");
         return bidRequest;
     }
 

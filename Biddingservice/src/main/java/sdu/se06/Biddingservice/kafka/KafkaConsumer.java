@@ -13,6 +13,15 @@ public class KafkaConsumer {
     @Autowired
     private KafkaEventProducer kafkaEventProducer;
 
+
+    // New bids
+    @KafkaListener(topics = "${kafka.topic.new.bid}", groupId = "${spring.kafka.consumer.group-id}")
+    public void consumeBiddingMessage(BidRequest bidRequest) {
+        System.out.println("Event from NewBid topic: " + bidRequest);
+        bidRequest.setSagaStatus(BidRequestState.PROCESSING);
+        kafkaEventProducer.sendCatalogBid(bidRequest);
+    }
+
     // Catalog processed
     @KafkaListener(topics = "${kafka.topic.Catalog.processed}", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeCatalogMessage(BidRequest bidRequest) {
@@ -21,31 +30,11 @@ public class KafkaConsumer {
         if (bidRequest.getCatalogBidRequestState().equals(BidRequestState.APPROVED)) {
             kafkaEventProducer.sendAccountMessage(bidRequest);
         } else {
-            // TODO Process event implement rollback.
-            bidRequest.setCatalogBidRequestState(BidRequestState.ROLLBACK);
+            bidRequest.setSagaStatus(BidRequestState.REJECTED);
+            kafkaEventProducer.sendBidRejected(bidRequest);
         }
     }
 
-
-    // New bids
-    @KafkaListener(topics = "${kafka.topic.new.bid}", groupId = "${spring.kafka.consumer.group-id}")
-    public void consumeBiddingMessage(BidRequest bidRequest) {
-        System.out.println("Event from NewBid topic: " + bidRequest);
-
-        // TODO Process event
-        kafkaEventProducer.sendCatalogBid(bidRequest);
-
-    }
-
-    @KafkaListener(topics = "${kafka.topic.Catalog.finished}", groupId = "${spring.kafka.consumer.group-id}")
-    public void consumeSagaDoneMessage(BidRequest bidRequest) {
-
-        System.out.println("saga done: " + bidRequest);
-
-        // TODO Process event
-
-
-    }
 
     @KafkaListener(topics = "${kafka.topic.account.processed}", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeAccountProcessed(BidRequest bidRequest) {
@@ -58,10 +47,27 @@ public class KafkaConsumer {
             kafkaEventProducer.sendUpdateCatalog(bidRequest);
         } else {
             // Time for roll back
+            bidRequest.setSagaStatus(BidRequestState.REJECTED);
+            kafkaEventProducer.sendBidRejected(bidRequest);
         }
 
 
         //kafkaEventProducer.sendCatalogBid(bidRequest);
 
+    }
+
+
+    @KafkaListener(topics = "${kafka.topic.Catalog.finished}", groupId = "${spring.kafka.consumer.group-id}")
+    public void bidRequestFinished(BidRequest bidRequest) {
+
+        if (bidRequest.getCatalogBidRequestState().equals(BidRequestState.REJECTED)) {
+            bidRequest.setSagaStatus(BidRequestState.ROLLBACK);
+            System.out.println("saga rejected " + bidRequest);
+            kafkaEventProducer.sendBidRejected(bidRequest);
+        } else {
+            bidRequest.setSagaStatus(BidRequestState.APPROVED);
+            System.out.println("saga complete: " + bidRequest);
+            kafkaEventProducer.sendBidApproved(bidRequest);
+        }
     }
 }

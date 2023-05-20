@@ -2,6 +2,6 @@ package sdu.se06.auctioncommon.Model;
 
 public enum BidRequestState {
 
-        CREATED, APPROVED, REJECTED, ROLLBACK
+        CREATED, APPROVED, REJECTED, ROLLBACK, PROCESSING
 
 }

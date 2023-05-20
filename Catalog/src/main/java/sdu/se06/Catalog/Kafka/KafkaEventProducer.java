@@ -26,7 +26,7 @@ public class KafkaEventProducer {
         kafkaTemplate.send(topic2,bidRequest.getListingID(), bidRequest);
     }
 
-    public void sendBidSagaDone(BidRequest bidRequest) {
+    public void sendCatalogComplete(BidRequest bidRequest) {
         kafkaTemplate.send(bidSagaDone,bidRequest.getListingID(),bidRequest);
     }
 }

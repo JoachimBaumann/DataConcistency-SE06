@@ -14,10 +14,13 @@ public class KafkaEventProducer {
 
     @Value("${kafka.topic.new.bid}")
     private String topic;
-    private String topic2 = "Catalog-topic";
-    private String accountTopic = "Account-topic";
+    private final String accountTopic = "Account-topic";
 
-    private String updateCatalogTopic = "Catalog-update-topic";
+    private final String updateCatalogTopic = "Catalog-update-topic";
+
+    private final String bidRejectedTopic = "bid-rejected-topic";
+
+    private final String bidApproved = "bid-approved-topic";
 
     @Autowired
     public KafkaEventProducer(KafkaTemplate<Integer, BidRequest> kafkaTemplate) {
@@ -26,6 +29,10 @@ public class KafkaEventProducer {
 
     public void sendBidRequest(BidRequest bidRequest) {
         kafkaTemplate.send(topic,bidRequest.getListingID(), bidRequest);
+    }
+
+    public void sendBidRejected(BidRequest bidRequest) {
+        kafkaTemplate.send(bidRejectedTopic,bidRequest.getListingID(),bidRequest);
     }
 
     public void sendUpdateCatalog(BidRequest bidRequest) {
@@ -37,6 +44,10 @@ public class KafkaEventProducer {
     }
 
     public void sendCatalogBid(BidRequest bidRequest) {
+        String topic2 = "Catalog-topic";
         kafkaTemplate.send(topic2,bidRequest.getListingID(), bidRequest);
+    }
+    public void sendBidApproved(BidRequest bidRequest) {
+        kafkaTemplate.send(bidApproved,bidRequest.getListingID(), bidRequest);
     }
 }
