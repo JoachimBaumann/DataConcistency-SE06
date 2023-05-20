@@ -6,6 +6,18 @@
     <groupId>sdu.se06</groupId>
     <artifactId>Bachelor</artifactId>
     <version>0.1.0</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
+            <version>3.0.6</version>
+            <scope>compile</scope>
+        </dependency>
+    </dependencies>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
     <packaging>pom</packaging>
 
     <modules>

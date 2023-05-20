@@ -11,14 +11,20 @@
         <module name="Biddingservice" />
         <module name="auction-common" />
         <module name="Catalog" />
+        <module name="Gateway" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="APIGateway" target="17" />
+    </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="APIGateway" options="-parameters" />
       <module name="Account" options="-parameters" />
       <module name="Biddingservice" options="-parameters" />
       <module name="Catalog" options="-parameters" />
+      <module name="Gateway" options="-parameters" />
       <module name="auction-common" options="-parameters" />
     </option>
   </component>

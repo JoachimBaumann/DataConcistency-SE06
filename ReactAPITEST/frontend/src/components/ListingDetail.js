@@ -15,7 +15,7 @@ function ListingDetail () {
 
   //post URL
   //INSERT POST URL ONCE MADE.
-  const url = "http://localhost:8083/bid/newbid"
+  const url = "http://localhost:8080/bid/newbid"
 
 
   //current user ID
@@ -56,7 +56,7 @@ function ListingDetail () {
   const [listing, setListing] = useState("")
 
   useEffect(() => {
-    axios.get(`http://localhost:8081/api/v1/listing/${id}`)
+    axios.get(`http://localhost:8080/api/v1/listing/${id}`)
       .then(response => {
         console.log(response)
         setListing(response.data);

@@ -4,7 +4,7 @@ import UserContext from "./UserContext";
 
 
 const CreateListing = () => {
-    const url="http://localhost:8081/api/v1/listings/"
+    const url="http://localhost:8080/api/v1/listings/"
 
 
     const[listingName, setListingName] = useState("");
@@ -83,7 +83,7 @@ const CreateListing = () => {
                 value={listingPrice}
                 onChange={(e) => setListingPrice(e.target.value)}
                 />
-                Y</div>
+                </div>
             <div className="form-row">
                 <label htmlFor="listingDescription" className="form-label">
                 Listing Description:               

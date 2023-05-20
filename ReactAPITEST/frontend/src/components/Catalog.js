@@ -8,7 +8,7 @@ function Catalog(){
     const [listings, setListings] = useState([]);
 
     useEffect(() => {
-        axios.get("http://localhost:8081/api/v1/listings/")
+        axios.get("http://localhost:8080/api/v1/listings/")
         .then(response => {
             setListings(response.data);
         })
@@ -36,19 +36,4 @@ function Catalog(){
       </div>
     );
 }
-/*
-        <div>
-          <ul className="listingUL">
-            {listings.map(listing => (
-              <li className="listingList" key={listing.listingID} orientation="horizontal">
-                <Link to= {`/listing/${listing.listingID}`} state={{ id: listing.listingID }}>
-                <h2>{listing.listingName}</h2>
-                <p>{listing.listingDescription}</p>
-                <img href="./frontend/Images/placeholder.png"/>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        </div>
-*/
 export default Catalog;

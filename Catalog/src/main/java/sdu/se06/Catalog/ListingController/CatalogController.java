@@ -8,7 +8,6 @@ import sdu.se06.Catalog.model.Listing;
 import java.util.List;
 import java.util.Optional;
 
-@CrossOrigin("*")
 @RequestMapping("/api/v1/")
 @RestController
 public class CatalogController {
@@ -20,8 +19,8 @@ public class CatalogController {
     }
 
 
-
     @PostMapping("/listings/")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<String> createListing(@RequestBody Listing listings) {
 
         repository.save(listings);
@@ -29,18 +28,21 @@ public class CatalogController {
     }
 
     @GetMapping("/listings/")
+    @CrossOrigin(origins = "http://localhost:3000")
     public List<Listing> getListings() {
 
         return repository.findAll();
     }
 
     @GetMapping("/test")
+    @CrossOrigin(origins = "http://localhost:3000")
     public String createListing() {
         repository.save(new Listing(1, "Test", false, 10, "nice", "poor", "http://phillipIgstreng.dk"));
         return "created";
     }
 
     @GetMapping(value = "/listing/{id}")
+    @CrossOrigin(origins = "http://localhost:3000")
     public ResponseEntity<Listing> getListing(@PathVariable("id") int id) {
         Optional<Listing> listingData = repository.findById(id);
 
