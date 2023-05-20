@@ -13,6 +13,7 @@
         <module>auction-common</module>
         <module>Biddingservice</module>
         <module>Account</module>
+        <module>Gateway</module>
     </modules>
 
 </project>
