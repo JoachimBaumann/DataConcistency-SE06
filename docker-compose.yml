@@ -25,7 +25,6 @@ services:
 
   ##  ACCOUNT
   accountservice:
-
     build:
       context: ./Account
       dockerfile: Account-Docker
@@ -52,7 +51,7 @@ services:
       context: ./Biddingservice
       dockerfile: BiddingService
     ports:
-      - "8080:8080"
+      - "8083:8080"
     networks:
       - main
 
