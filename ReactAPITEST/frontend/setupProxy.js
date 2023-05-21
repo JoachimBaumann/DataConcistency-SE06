@@ -4,7 +4,7 @@ module.exports = function(app) {
   app.use(
     '/images',
     createProxyMiddleware({
-      target: 'http://localhost:3000',
+      target: 'http://reactservice:3000',
       pathRewrite: {
         '^/images': '',
       },

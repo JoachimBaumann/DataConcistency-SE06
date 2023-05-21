@@ -2,6 +2,7 @@ version: "3.9"
 services:
   ## FRONTEND
   reactservice:
+    container_name: reactservice
     build:
       context: ReactAPITEST/frontend
       dockerfile: reactdocker
@@ -9,8 +10,11 @@ services:
       - "3000:3000"
     networks:
       - client
+    links:
+      - "nginxservice:nginxservice"
   ## CATALOG
   catalogservice:
+    container_name: catalogservice
     depends_on:
       - catalogsql
     image: catalogservice
@@ -18,60 +22,61 @@ services:
     build:
       context: ./Catalog
       dockerfile: catalogService
-    ports:
-      - "8081:8080"
     links:
       - "catalogsql:catalogsql"
     networks:
-      - main
+      - backend
   catalogsql:
     image: mysql
     networks:
-      - main
+      - backend
     environment:
       MYSQL_ROOT_PASSWORD: "se06"
       MYSQL_DATABASE: "CatalogDB"
 
   ##  ACCOUNT
   accountservice:
+    container_name: accountservice
     build:
       context: ./Account
       dockerfile: Account-Docker
     depends_on:
       - accountsql
-    ports:
-      - "8082:8080"
     networks:
-      - main
+      - backend
     links:
       - "accountsql:accountsql"
   accountsql:
     image: mysql
     networks:
-      - main
+      - backend
     environment:
       MYSQL_ROOT_PASSWORD: "se06"
       MYSQL_DATABASE: "accountDB"
 
-  nginx:
+  nginxservice:
+    container_name: nginxservice
     build:
       context: ./Nginx
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
     networks:
-      - main
+      - backend
       - client
+    links:
+      - biddingservice:biddingservice
+      - catalogservice:catalogservice
+      - accountservice:accountservice
 
   ## BIDDING
   biddingservice:
+    container_name: biddingservice
     build:
       context: ./Biddingservice
       dockerfile: BiddingService
-    ports:
-      - "8083:8080"
     networks:
-      - main
+      - backend
 
   ##KAFKA
   zookeeper:
@@ -82,7 +87,7 @@ services:
     ports:
       - 22181:2181
     networks:
-      - main
+      - backend
   broker:
     image: confluentinc/cp-kafka:latest
     depends_on:
@@ -97,9 +102,9 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
     networks:
-      - main
+      - backend
 
 
 networks:
-  main:
+  backend:
   client:
