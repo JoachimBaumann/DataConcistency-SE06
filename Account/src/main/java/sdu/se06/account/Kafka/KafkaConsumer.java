@@ -22,7 +22,7 @@ public class KafkaConsumer {
     @KafkaListener(topics = "${kafka.topic.new}", groupId = "${spring.kafka.consumer.group-id}")
     public void consumeMessage(BidRequest bidRequest){
 
-        kafkaEventProducer.sendProcessedRequest(verifyBidRequest(bidRequest));
+        kafkaEventProducer.sendProcessedRequest(newBidRequest(bidRequest));
 
     }
 
@@ -45,7 +45,7 @@ public class KafkaConsumer {
         }
     }
 
-    private BidRequest verifyBidRequest(BidRequest bidRequest) {
+    private BidRequest newBidRequest(BidRequest bidRequest) {
 
         Optional<AccountEntity> accountData = repository.findById(bidRequest.getUserID());
 
