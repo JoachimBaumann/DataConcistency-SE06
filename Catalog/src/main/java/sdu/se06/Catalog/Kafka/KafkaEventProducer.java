@@ -12,10 +12,10 @@ public class KafkaEventProducer {
 
 
     @Value("${Kafka.topic.processed}")
-    private String topic2;
+    protected String topic2;
 
     @Value("${kafka.topic.finished}")
-    private String bidSagaDone;
+    protected String bidSagaDone;
 
 
     public KafkaEventProducer(KafkaTemplate<Integer, BidRequest> kafkaTemplate) {
