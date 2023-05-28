@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Bachelor.iml" filepath="$PROJECT_DIR$/.idea/Bachelor.iml" />
-      <module fileurl="file://$PROJECT_DIR$/Catalog/Catalog.iml" filepath="$PROJECT_DIR$/Catalog/Catalog.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Bachelor.iml" filepath="$PROJECT_DIR$/Bachelor.iml" />
     </modules>
   </component>
 </project>

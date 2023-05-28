@@ -21,7 +21,7 @@
 			<groupId>org.springframework.data</groupId>
 			<artifactId>spring-data-bom</artifactId>
 			<version>2022.0.3</version>
-			<scope>import</scope>
+			<scope>compile</scope>
 			<type>pom</type>
 		</dependency>
 		<dependency>
@@ -63,7 +63,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>RELEASE</version>
+			<version>1.18.28</version>
 			<scope>compile</scope>
 		</dependency>
 		<dependency>
