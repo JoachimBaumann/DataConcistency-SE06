@@ -27,14 +27,14 @@ jobs:
           key: ${{ runner.os }}-maven-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-maven-
 
-      - name: Build Auction Common
+      - name: Build and test auction-common
         run: mvn clean install --file auction-common/pom.xml
-
-      - name: Build and test Bidding Service
-        run: mvn clean install --file Biddingservice/pom.xml
 
       - name: Build and test Catalog Service
         run: mvn clean install --file Catalog/pom.xml
+
+      - name: Build and test Bidding Service
+        run: mvn clean install --file Biddingservice/pom.xml
 
       - name: Build and test Account Service
         run: mvn clean install --file Account/pom.xml
