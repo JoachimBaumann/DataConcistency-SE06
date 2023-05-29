@@ -77,3 +77,4 @@ jobs:
           dockerfile: catalogService
           push: true
           tags: ghcr.io/${{ secrets.REGISTRY_OWNER }}/catalog-service:latest
+          
