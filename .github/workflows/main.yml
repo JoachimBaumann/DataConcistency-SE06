@@ -56,15 +56,15 @@ jobs:
 
         - name: Build and Push Docker Image for Catalog Service
           run: |
-            docker build -t baumann21/catalog-service:latest -f Catalog/catalogService
+            docker build -t baumann21/catalog-service:latest -f Catalog/catalogService .
             docker push baumann21/catalog-service:latest
 
         - name: Build and Push Docker Image for Account Service
           run: |
-            docker build -t baumann21/account-service:latest -f Account/Account-Docker
+            docker build -t baumann21/account-service:latest -f Account/Account-Docker .
             docker push baumann21/account-service:latest
 
         - name: Build and Push Docker Image for Bidding Service
           run: |
-            docker build -t baumann21/bidding-service:latest -f Biddingservice/BiddingService
+            docker build -t baumann21/bidding-service:latest -f Biddingservice/BiddingService .
             docker push baumann21/bidding-service:latest
