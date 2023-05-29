@@ -1,0 +1,58 @@
+name: Java CI with Maven and Docker
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '11'
+
+      - name: Build with Maven
+        run: mvn clean install -DskipTests
+
+      - name: Test with Maven
+        run: mvn test
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ secrets.REGISTRY_OWNER }}
+          password: ${{ secrets.REGISTRY_TOKEN }}
+
+      - name: Build and push Docker image for Account service
+        uses: docker/build-push-action@v2
+        with:
+          context: ./Account
+          dockerfile: Account-Docker
+          push: true
+          tags: ghcr.io/${{ secrets.REGISTRY_OWNER }}/account-service:latest
+
+      - name: Build and push Docker image for Bidding service
+        uses: docker/build-push-action@v2
+        with:
+          context: ./Bidding-Service
+          dockerfile: BiddingService
+          push: true
+          tags: ghcr.io/${{ secrets.REGISTRY_OWNER }}/bidding-service:latest
+
+      - name: Build and push Docker image for Catalog service
+        uses: docker/build-push-action@v2
+        with:
+          context: ./Catalog
+          dockerfile: catalogService
+          push: true
+          tags: ghcr.io/${{ secrets.REGISTRY_OWNER }}/catalog-service:latest
