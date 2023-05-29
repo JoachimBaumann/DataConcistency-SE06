@@ -5,9 +5,10 @@ package sdu.se06.account.entity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 
 //This annotation specifies this class as a JPA entity, making sure that these values are mapped to the SQL database
-@Entity
+@Entity @AllArgsConstructor
 public class AccountEntity {
     public AccountEntity() {
     }

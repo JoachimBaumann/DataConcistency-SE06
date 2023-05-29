@@ -14,11 +14,6 @@ import sdu.se06.auctioncommon.Model.BidRequest;
 @SpringBootApplication
 public class AccountApplication {
 
-    @Autowired
-    KafkaEventProducer kafkaEventProducer;
-
-    @Autowired
-    KafkaTemplate<Integer, BidRequest> kafkaTemplate;
     public static void main(String[] args) {
         SpringApplication.run(AccountApplication.class, args);
 
