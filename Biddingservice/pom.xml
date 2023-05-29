@@ -20,7 +20,8 @@
         <dependency>
             <groupId>sdu.se06</groupId>
             <artifactId>auction-common</artifactId>
-            <version>0.0.1-Snapshot</version>
+            <version>0.0.1-SNAPSHOT</version>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
