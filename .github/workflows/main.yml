@@ -18,8 +18,11 @@ jobs:
       - name: Set up Java JDK
         uses: actions/setup-java@v2
         with:
-          java-version: '17'
+          java-version: '11'
           distribution: 'adopt'
+
+      - name: Build and install auction-common library
+        run: mvn clean install -DskipTests -f ./auction-common/pom.xml
 
       - name: Build with Maven
         run: mvn clean install -DskipTests
