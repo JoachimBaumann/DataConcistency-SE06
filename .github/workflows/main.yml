@@ -19,10 +19,8 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'jdk'
-          architecture: 'x64'
-          check-latest: false
-
+          distribution: 'adopt'
+          cache: 'local'
 
       - name: Build and install auction-common library
         run: mvn clean install -DskipTests -f ./auction-common/pom.xml
@@ -81,4 +79,3 @@ jobs:
           dockerfile: catalogService
           push: true
           tags: ghcr.io/${{ secrets.REGISTRY_OWNER }}/catalog-service:latest
-          
