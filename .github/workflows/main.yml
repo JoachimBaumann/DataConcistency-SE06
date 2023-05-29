@@ -42,7 +42,7 @@ jobs:
 
       - name: Build and test Bidding Service
         run: |
-          cd bidding-service
+          cd Biddingservice
           mvn clean install
 
   build-catalog-service:
@@ -62,7 +62,7 @@ jobs:
 
       - name: Build and test Catalog Service
         run: |
-          cd catalog-service
+          cd Catalog
           mvn clean install
 
   build-account-service:
@@ -82,5 +82,5 @@ jobs:
 
       - name: Build and test Account Service
         run: |
-          cd account-service
+          cd Account
           mvn clean install
