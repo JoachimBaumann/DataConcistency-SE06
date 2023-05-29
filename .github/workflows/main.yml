@@ -19,16 +19,33 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
-          distribution: 'adopt'
 
       - name: Build and install auction-common library
         run: mvn clean install -DskipTests -f ./auction-common/pom.xml
 
-      - name: Build with Maven
+      - name: Build and install Bachelor project
         run: mvn clean install -DskipTests
+
+      - name: Build and install Account service
+        run: mvn clean install -DskipTests -f ./Account/pom.xml
+
+      - name: Build and install Biddingservice
+        run: mvn clean install -DskipTests -f ./Biddingservice/pom.xml
+
+      - name: Build and install Catalog service
+        run: mvn clean install -DskipTests -f ./Catalog/pom.xml
 
       - name: Test with Maven
         run: mvn test
+
+  docker:
+    needs: build
+    runs-on: ubuntu-latest
+    if: ${{ needs.build.result == 'success' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
@@ -48,7 +65,7 @@ jobs:
       - name: Build and push Docker image for Bidding service
         uses: docker/build-push-action@v2
         with:
-          context: ./Bidding-Service
+          context: ./Biddingservice
           dockerfile: BiddingService
           push: true
           tags: ghcr.io/${{ secrets.REGISTRY_OWNER }}/bidding-service:latest
