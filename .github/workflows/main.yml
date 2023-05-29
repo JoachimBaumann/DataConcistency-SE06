@@ -21,8 +21,9 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Build auction-common library
-        run: mvn clean install -DskipTests -f ./auction-common/pom.xml
+      - name: Install auction-common JAR to local Maven repository
+        run: mvn install:install-file -Dfile=./auction-common/target/auction-common.jar -DgroupId=sdu.se06 -DartifactId=auction-common -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar
+
 
       - name: Build and install Bachelor project
         run: mvn clean install -DskipTests
