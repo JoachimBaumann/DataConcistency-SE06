@@ -114,8 +114,4 @@ public class CatalogControllerIntegrationTests {
         // Verify that the repository's findById method was called with the correct ID
         verify(catalogRepository).findById(1);
     }
-
-
-
-
 }

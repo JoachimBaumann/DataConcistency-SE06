@@ -54,12 +54,8 @@ public class KafkaConsumer {
 
 
     private BidRequest verifyNewBid(BidRequest bidRequest) {
-
-
         // VERIFY LISTING INFORMATION
-
         Optional<Listing> listingData = repository.findById(bidRequest.getListingID());
-
         if (listingData.isPresent()) {
             // Check price
             if (listingData.get().getListingPrice() * bidmultiplier <= bidRequest.getAmount()) {

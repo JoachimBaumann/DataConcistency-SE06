@@ -7,11 +7,13 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 //This annotation specifies this class as a JPA entity, making sure that these values are mapped to the SQL database
 @Getter @Setter
 @Entity @AllArgsConstructor
+@NoArgsConstructor
 public class AccountEntity {
     public AccountEntity() {
     }
