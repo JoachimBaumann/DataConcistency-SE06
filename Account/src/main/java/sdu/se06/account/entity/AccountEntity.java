@@ -15,8 +15,6 @@ import lombok.Setter;
 @Entity @AllArgsConstructor
 @NoArgsConstructor
 public class AccountEntity {
-    public AccountEntity() {
-    }
 
     public AccountEntity(String username, String password, double balance, String email) {
         this.username = username;
