@@ -34,12 +34,6 @@ public class CatalogController {
         return repository.findAll();
     }
 
-    @GetMapping("/test")
-    @CrossOrigin(origins = "http://localhost:3000")
-    public String createListing() {
-        repository.save(new Listing(1, "Test", false, 10, "nice", "poor", "http://phillipIgstreng.dk"));
-        return "created";
-    }
 
     @GetMapping(value = "/listing/{id}")
     @CrossOrigin(origins = "http://localhost:3000")
