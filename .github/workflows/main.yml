@@ -21,7 +21,7 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
-      - name: Build and install auction-common library
+      - name: Build auction-common library
         run: mvn clean install -DskipTests -f ./auction-common/pom.xml
 
       - name: Build and install Bachelor project
