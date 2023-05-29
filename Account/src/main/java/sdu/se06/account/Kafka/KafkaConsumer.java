@@ -33,7 +33,7 @@ public class KafkaConsumer {
 
     }
 
-    private void rollBack(BidRequest bidRequest) {
+    void rollBack(BidRequest bidRequest) {
         if(bidRequest.getAccountbidRequestState().equals(BidRequestState.APPROVED) && bidRequest.getSagaStatus().equals(BidRequestState.ROLLBACK)) {
             Optional<AccountEntity> accountData = repository.findById(bidRequest.getUserID());
             if(accountData.isPresent()) {
@@ -45,7 +45,7 @@ public class KafkaConsumer {
         }
     }
 
-    private BidRequest newBidRequest(BidRequest bidRequest) {
+    BidRequest newBidRequest(BidRequest bidRequest) {
 
         Optional<AccountEntity> accountData = repository.findById(bidRequest.getUserID());
 
@@ -67,5 +67,7 @@ public class KafkaConsumer {
         bidRequest.setSource("Account not found!");
         return bidRequest;
     }
+
+
 
 }
