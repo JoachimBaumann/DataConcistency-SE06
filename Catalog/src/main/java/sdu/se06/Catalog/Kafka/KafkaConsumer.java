@@ -34,7 +34,6 @@ public class KafkaConsumer {
     }
 
 
-
     private BidRequest updateCatalog(BidRequest bidRequest) {
         Optional<Listing> listingData = repository.findById(bidRequest.getListingID());
 
@@ -43,6 +42,7 @@ public class KafkaConsumer {
 
             listing.setListingPrice(bidRequest.getAmount());
             repository.save(listing);
+            bidRequest.setAccountbidRequestState(BidRequestState.APPROVED);
             System.out.println("Updated price in catalog from bid: " + bidRequest);
             return bidRequest;
         } else {
@@ -53,7 +53,7 @@ public class KafkaConsumer {
     }
 
 
-    private BidRequest verifyNewBid(BidRequest bidRequest) {
+    BidRequest verifyNewBid(BidRequest bidRequest) {
         // VERIFY LISTING INFORMATION
         Optional<Listing> listingData = repository.findById(bidRequest.getListingID());
         if (listingData.isPresent()) {
