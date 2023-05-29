@@ -20,6 +20,8 @@ jobs:
         with:
           java-version: '17'
           distribution: 'jdk'
+          architecture: 'x64'
+          check-latest: false
 
 
       - name: Build and install auction-common library
