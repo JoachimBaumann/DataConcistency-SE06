@@ -19,6 +19,7 @@ jobs:
         uses: actions/setup-java@v2
         with:
           java-version: '17'
+          distribution: 'adopt'
 
       - name: Build and install auction-common library
         run: mvn clean install -DskipTests -f ./auction-common/pom.xml
@@ -46,6 +47,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
+
+      - name: Set up Java JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
 
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v1
