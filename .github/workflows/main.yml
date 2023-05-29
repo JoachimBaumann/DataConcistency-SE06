@@ -6,8 +6,8 @@ on:
       - main
 
 jobs:
-  build-auction-common:
-    name: Build Auction Common
+  build-services:
+    name: Build and Test Services
     runs-on: ubuntu-latest
 
     steps:
@@ -21,66 +21,13 @@ jobs:
           distribution: 'adopt'
 
       - name: Build Auction Common
-        run: |
-          cd auction-common
-          mvn clean install
-
-  build-bidding-service:
-    name: Build and Test Bidding Service
-    needs: build-auction-common
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: 17
-          distribution: 'adopt'
+        run: mvn clean install --file auction-common/pom.xml
 
       - name: Build and test Bidding Service
-        run: |
-          cd Biddingservice
-          mvn clean install
-
-  build-catalog-service:
-    name: Build and Test Catalog Service
-    needs: build-auction-common
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: 17
-          distribution: 'adopt'
+        run: mvn clean install --file bidding-service/pom.xml
 
       - name: Build and test Catalog Service
-        run: |
-          cd Catalog
-          mvn clean install
-
-  build-account-service:
-    name: Build and Test Account Service
-    needs: build-auction-common
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
-
-      - name: Set up JDK 17
-        uses: actions/setup-java@v2
-        with:
-          java-version: 17
-          distribution: 'adopt'
+        run: mvn clean install --file catalog-service/pom.xml
 
       - name: Build and test Account Service
-        run: |
-          cd Account
-          mvn clean install
+        run: mvn clean install --file account-service/pom.xml
