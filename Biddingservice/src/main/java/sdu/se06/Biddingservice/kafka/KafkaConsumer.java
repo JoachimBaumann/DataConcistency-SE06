@@ -11,7 +11,7 @@ import sdu.se06.auctioncommon.Model.BidRequestState;
 public class KafkaConsumer {
 
     @Autowired
-    private KafkaEventProducer kafkaEventProducer;
+    protected KafkaEventProducer kafkaEventProducer;
 
 
     // New bids
