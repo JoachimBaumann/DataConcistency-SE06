@@ -23,11 +23,14 @@ jobs:
       - name: Build Auction Common
         run: mvn clean install --file auction-common/pom.xml
 
+      - name: Install Auction Common in Local Repository
+        run: mvn install:install-file -Dfile=auction-common/target/auction-common-0.0.1-SNAPSHOT.jar -DgroupId=sdu.se06 -DartifactId=auction-common -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar
+
       - name: Build and test Bidding Service
-        run: mvn clean install --file Biddingservice/pom.xml
+        run: mvn clean install --file bidding-service/pom.xml
 
       - name: Build and test Catalog Service
-        run: mvn clean install --file Catalog/pom.xml
+        run: mvn clean install --file catalog-service/pom.xml
 
       - name: Build and test Account Service
-        run: mvn clean install --file Account/pom.xml
+        run: mvn clean install --file account-service/pom.xml
