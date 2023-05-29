@@ -48,5 +48,8 @@ jobs:
           name: auction-common
           path: target
 
+      - name: Install auction-common artifact to local repository
+        run: mvn install:install-file -Dfile=target/auction-common.jar -DgroupId=sdu.se06 -DartifactId=auction-common -Dversion=0.0.1-SNAPSHOT -Dpackaging=jar
+
       - name: Build Biddingservice
         run: mvn clean install -DskipTests
