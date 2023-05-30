@@ -23,6 +23,8 @@ public class KafkaConsumerUnitTest {
 
     @InjectMocks
     private KafkaConsumer kafkaConsumer;
+    @Mock
+    private KafkaEventProducer kafkaEventProducer;
 
     @BeforeEach
     public void setup() {
@@ -30,89 +32,125 @@ public class KafkaConsumerUnitTest {
     }
 
     @Test
-    public void testConsumeMessage_ShouldSendProcessedRequest() {
+    public void testConsumeMessage_WithSufficientFunds_ShouldApproveBidRequest() {
         // Arrange
         BidRequest bidRequest = new BidRequest();
         bidRequest.setUserID(123);
         bidRequest.setAmount(100.0);
 
-        // Mock the KafkaEventProducer to verify the method call
-        KafkaEventProducer kafkaEventProducer = mock(KafkaEventProducer.class);
-        kafkaConsumer.kafkaEventProducer = (kafkaEventProducer);
+        AccountEntity account = new AccountEntity();
+        account.setId(123);
+        account.setBalance(500.0);
+        when(repository.findById(123)).thenReturn(Optional.of(account));
 
         // Act
         kafkaConsumer.consumeMessage(bidRequest);
 
         // Assert
-        verify(kafkaEventProducer, times(1)).sendProcessedRequest(any(BidRequest.class));
-    }
-
-    @Test
-    public void testConsumeRejectedBids_ShouldRollBack() {
-        // Arrange
-        BidRequest bidRequest = new BidRequest();
-        bidRequest.setAccountbidRequestState(BidRequestState.APPROVED);
-        bidRequest.setSagaStatus(BidRequestState.ROLLBACK);
-        bidRequest.setUserID(123);
-        bidRequest.setAmount(100.0);
-
-        // Mock the rollBack method to verify the account balance update
-        KafkaConsumer kafkaConsumerSpy = spy(kafkaConsumer);
-        AccountEntity account = new AccountEntity();
-        account.setId(123);
-        account.setBalance(500.0);
-        when(repository.findById(123)).thenReturn(Optional.of(account));
-
-        // Act
-        kafkaConsumerSpy.consumeRejectedBids(bidRequest);
-
-        // Assert
-        assertEquals(600.0, account.getBalance());
-        verify(repository, times(1)).save(any(AccountEntity.class));
-    }
-
-    @Test
-    public void testNewBidRequest_WithSufficientFunds_ShouldApproveBidRequest() {
-        // Arrange
-        BidRequest bidRequest = new BidRequest();
-        bidRequest.setUserID(123);
-        bidRequest.setAmount(100.0);
-
-        // Mock the repository to return an account with sufficient balance
-        AccountEntity account = new AccountEntity();
-        account.setId(123);
-        account.setBalance(500.0);
-        when(repository.findById(123)).thenReturn(Optional.of(account));
-
-        // Act
-        BidRequest result = kafkaConsumer.newBidRequest(bidRequest);
-
-        // Assert
-        assertEquals(BidRequestState.APPROVED, result.getAccountbidRequestState());
+        verify(kafkaEventProducer, times(1)).sendProcessedRequest(bidRequest);
+        assertEquals(BidRequestState.APPROVED, bidRequest.getAccountbidRequestState());
         assertEquals(400.0, account.getBalance());
     }
 
-
     @Test
-    public void testNewBidRequest_WithInsufficientFunds_ShouldRejectBidRequest() {
+    public void testConsumeMessage_WithInsufficientFunds_ShouldRejectBidRequest() {
         // Arrange
         BidRequest bidRequest = new BidRequest();
         bidRequest.setUserID(123);
         bidRequest.setAmount(1000.0);
 
-        // Mock the repository to return an account with insufficient balance
         AccountEntity account = new AccountEntity();
         account.setId(123);
         account.setBalance(500.0);
         when(repository.findById(123)).thenReturn(Optional.of(account));
 
         // Act
-        BidRequest result = kafkaConsumer.newBidRequest(bidRequest);
+        kafkaConsumer.consumeMessage(bidRequest);
 
         // Assert
-        assertEquals(BidRequestState.REJECTED, result.getAccountbidRequestState());
-        assertEquals("Insufficient funds", result.getSource());
+        verify(kafkaEventProducer, times(1)).sendProcessedRequest(bidRequest);
+        assertEquals(BidRequestState.REJECTED, bidRequest.getAccountbidRequestState());
+        assertEquals("Insufficient funds", bidRequest.getSource());
         assertEquals(500.0, account.getBalance());
-        verify(repository, times(0)).save(any(AccountEntity.class));
+    }
+
+    @Test
+    public void testConsumeMessage_WithNonexistentAccount_ShouldRejectBidRequest() {
+        // Arrange
+        BidRequest bidRequest = new BidRequest();
+        bidRequest.setUserID(123);
+        bidRequest.setAmount(100.0);
+
+        when(repository.findById(123)).thenReturn(Optional.empty());
+
+        // Act
+        kafkaConsumer.consumeMessage(bidRequest);
+
+        // Assert
+        verify(kafkaEventProducer, times(1)).sendProcessedRequest(bidRequest);
+        assertEquals(BidRequestState.REJECTED, bidRequest.getAccountbidRequestState());
+        assertEquals("Account not found!", bidRequest.getSource());
+    }
+
+    @Test
+    public void testConsumeRejectedBids_WithApprovedBidRequest_ShouldRollbackChanges() {
+        // Arrange
+        BidRequest bidRequest = new BidRequest();
+        bidRequest.setUserID(123);
+        bidRequest.setAmount(100.0);
+        bidRequest.setAccountbidRequestState(BidRequestState.APPROVED);
+        bidRequest.setSagaStatus(BidRequestState.ROLLBACK);
+
+        AccountEntity account = new AccountEntity();
+        account.setId(123);
+        account.setBalance(500.0);
+        when(repository.findById(123)).thenReturn(Optional.of(account));
+
+        // Act
+        kafkaConsumer.consumeRejectedBids(bidRequest);
+
+        // Assert
+        verify(repository, times(1)).save(account);
+        assertEquals(600.0, account.getBalance());
+    }
+
+    @Test
+    public void testConsumeRejectedBids_WithRejectedBidRequest_ShouldNotRollbackChanges() {
+        // Arrange
+        BidRequest bidRequest = new BidRequest();
+        bidRequest.setUserID(123);
+        bidRequest.setAmount(1000.0);
+        bidRequest.setAccountbidRequestState(BidRequestState.REJECTED);
+        bidRequest.setSagaStatus(BidRequestState.ROLLBACK);
+
+        AccountEntity account = new AccountEntity();
+        account.setId(123);
+        account.setBalance(500.0);
+        when(repository.findById(123)).thenReturn(Optional.of(account));
+
+        // Act
+        kafkaConsumer.consumeRejectedBids(bidRequest);
+
+        // Assert
+        verify(repository, never()).save(account);
+        assertEquals(500.0, account.getBalance());
+    }
+
+    @Test
+    public void testConsumeRejectedBids_WithNonexistentAccount_ShouldNotRollbackChanges() {
+        // Arrange
+        BidRequest bidRequest = new BidRequest();
+        bidRequest.setUserID(123);
+        bidRequest.setAmount(100.0);
+        bidRequest.setAccountbidRequestState(BidRequestState.APPROVED);
+        bidRequest.setSagaStatus(BidRequestState.ROLLBACK);
+
+        when(repository.findById(123)).thenReturn(Optional.empty());
+
+        // Act
+        kafkaConsumer.consumeRejectedBids(bidRequest);
+
+        // Assert
+        verify(repository, never()).save(any());
     }
 }

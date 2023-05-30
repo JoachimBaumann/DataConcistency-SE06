@@ -14,10 +14,10 @@ import java.util.Optional;
 
 import static org.mockito.Mockito.*;
 
-public class KafkaConsumerUnitTest {
+class KafkaConsumerTest {
 
     @Mock
-    private CatalogRepository repository;
+    private CatalogRepository catalogRepository;
 
     @Mock
     private KafkaEventProducer kafkaEventProducer;
@@ -26,76 +26,149 @@ public class KafkaConsumerUnitTest {
     private KafkaConsumer kafkaConsumer;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         MockitoAnnotations.openMocks(this);
     }
 
     @Test
-    public void testConsumeMessage_ShouldSendProcessedBidRequest() {
-        // Create a sample bid request
+    void testConsumeMessage_ShouldSendProcessedBidRequest() {
+        // Arrange
         BidRequest bidRequest = new BidRequest();
         bidRequest.setListingID(1);
         bidRequest.setAmount(100.0);
 
-        // Create a mock Listing object
         Listing listing = new Listing();
         listing.setListingPrice(90.0);
 
-        // Mock the repository behavior
-        when(repository.findById(1)).thenReturn(Optional.of(listing));
+        when(catalogRepository.findById(bidRequest.getListingID())).thenReturn(Optional.of(listing));
 
-        // Call the method under test
+        // Act
         kafkaConsumer.consumeMessage(bidRequest);
 
-        // Verify that the repository method was called
-        verify(repository).findById(1);
+        // Assert
+        verify(kafkaEventProducer, times(1)).sendProcessedbidRequest(argThat(argument -> {
+            // Verify the processed bid request
+            return argument.getListingID() == 1 &&
+                    argument.getAmount() == 100.0 &&
+                    argument.getCatalogBidRequestState() == BidRequestState.APPROVED;
+        }));
 
-        // Verify that the processed bid request was sent
-        verify(kafkaEventProducer).sendProcessedbidRequest(eq(bidRequest));
+        // Verify that catalogRepository.findById is called
+        verify(catalogRepository, times(1)).findById(bidRequest.getListingID());
+        // Verify that catalogRepository.save is not called
+        verify(catalogRepository, never()).save(any(Listing.class));
+        // Verify that kafkaEventProducer.sendCatalogComplete is not called
+        verify(kafkaEventProducer, never()).sendCatalogComplete(any(BidRequest.class));
     }
 
-    @Test
-    public void testConsumeMessage_WithInvalidListing_ShouldSendRejectedBidRequest() {
-        // Create a sample bid request
-        BidRequest bidRequest = new BidRequest();
-        bidRequest.setListingID(1);
-
-        // Mock the repository behavior
-        when(repository.findById(1)).thenReturn(Optional.empty());
-
-        // Call the method under test
-        kafkaConsumer.consumeMessage(bidRequest);
-
-        // Verify that the repository method was called
-        verify(repository).findById(1);
-
-        // Verify that the rejected bid request was sent
-        verify(kafkaEventProducer).sendProcessedbidRequest(argThat(processedBidRequest ->
-                processedBidRequest.getCatalogBidRequestState() == BidRequestState.REJECTED
-                        && processedBidRequest.getSource().equals("Listing doesnt exist")));
-    }
 
     @Test
-    public void testConsumeUpdateCatalog_ShouldSendCatalogComplete() {
-        // Create a sample bid request
+    void testConsumeMessage_ShouldRejectBidRequestWhenListingDoesNotExist() {
+        // Arrange
         BidRequest bidRequest = new BidRequest();
         bidRequest.setListingID(1);
         bidRequest.setAmount(100.0);
 
-        // Create a mock Listing object
+        when(catalogRepository.findById(bidRequest.getListingID())).thenReturn(Optional.empty());
+
+        // Act
+        kafkaConsumer.consumeMessage(bidRequest);
+
+        // Assert
+        verify(kafkaEventProducer, times(1)).sendProcessedbidRequest(argThat(argument -> {
+            // Verify the rejected bid request
+            return argument.getListingID() == 1 &&
+                    argument.getAmount() == 100.0 &&
+                    argument.getCatalogBidRequestState() == BidRequestState.REJECTED &&
+                    argument.getSource().equals("Listing doesnt exist");
+        }));
+
+        // Verify that catalogRepository.findById is called
+        verify(catalogRepository, times(1)).findById(bidRequest.getListingID());
+        // Verify that catalogRepository.save is not called
+        verify(catalogRepository, never()).save(any(Listing.class));
+        // Verify that kafkaEventProducer.sendCatalogComplete is not called
+        verify(kafkaEventProducer, never()).sendCatalogComplete(any(BidRequest.class));
+    }
+
+
+    @Test
+    void testConsumeMessage_ShouldRejectBidRequestWhenBidAmountIsNotSufficient() {
+        // Arrange
+        BidRequest bidRequest = new BidRequest();
+        bidRequest.setListingID(1);
+        bidRequest.setAmount(100.0);
+
         Listing listing = new Listing();
+        listing.setListingPrice(120.0);
 
-        // Mock the repository behavior
-        when(repository.findById(1)).thenReturn(Optional.of(listing));
+        when(catalogRepository.findById(bidRequest.getListingID())).thenReturn(Optional.of(listing));
 
-        // Call the method under test
+        // Act
+        kafkaConsumer.consumeMessage(bidRequest);
+
+        // Assert
+        verify(kafkaEventProducer, times(1)).sendProcessedbidRequest(argThat(argument -> {
+            // Verify the rejected bid request
+            return argument.getListingID() == 1 &&
+                    argument.getAmount() == 100.0 &&
+                    argument.getCatalogBidRequestState() == BidRequestState.REJECTED &&
+                    argument.getSource().equals("Bid amount not sufficient");
+        }));
+    }
+
+    @Test
+    void testConsumeUpdateCatalog_ShouldUpdateCatalogAndSendCatalogComplete() {
+        // Arrange
+        BidRequest bidRequest = new BidRequest();
+        bidRequest.setListingID(1);
+        bidRequest.setAmount(150.0);
+
+        Listing listing = new Listing();
+        listing.setListingID(1);
+        listing.setListingPrice(100.0);
+
+        when(catalogRepository.findById(bidRequest.getListingID())).thenReturn(Optional.of(listing));
+
+        // Act
         kafkaConsumer.consumeUpdateCatalog(bidRequest);
 
-        // Verify that the repository method was called
-        verify(repository).findById(1);
+        // Assert
+        verify(catalogRepository, times(1)).findById(bidRequest.getListingID());
+        verify(catalogRepository, times(1)).save(any(Listing.class));
+        verify(kafkaEventProducer, times(1)).sendCatalogComplete(argThat(argument -> {
+            // Verify the catalog complete message
+            return argument.getListingID() == 1 &&
+                    argument.getAmount() == 150.0 &&
+                    argument.getAccountbidRequestState() == BidRequestState.APPROVED;
+        }));
+    }
 
-        // Verify that the catalog complete event was sent
-        verify(kafkaEventProducer).sendCatalogComplete(bidRequest);
+    @Test
+    void testUpdateCatalog_ShouldSetRejectedStateWhenListingDoesNotExist() {
+        // Arrange
+        BidRequest bidRequest = new BidRequest();
+        bidRequest.setListingID(1);
+        bidRequest.setAmount(150.0);
 
+        when(catalogRepository.findById(bidRequest.getListingID())).thenReturn(Optional.empty());
+
+        // Act
+        BidRequest result = kafkaConsumer.updateCatalog(bidRequest);
+
+        // Assert
+        verify(catalogRepository, times(1)).findById(bidRequest.getListingID());
+        verifyNoMoreInteractions(catalogRepository);
+        verifyNoInteractions(kafkaEventProducer);
+
+        // Verify the rejected bid request
+        assert result != null;
+        assert result.getListingID() == 1;
+        assert result.getAmount() == 150.0;
+        assert result.getCatalogBidRequestState() == BidRequestState.REJECTED;
+        assert result.getSource().equals("Catalog update error");
     }
 }
+
+
+

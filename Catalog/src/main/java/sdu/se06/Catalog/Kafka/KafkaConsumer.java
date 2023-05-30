@@ -34,7 +34,7 @@ public class KafkaConsumer {
     }
 
 
-    private BidRequest updateCatalog(BidRequest bidRequest) {
+    BidRequest updateCatalog(BidRequest bidRequest) {
         Optional<Listing> listingData = repository.findById(bidRequest.getListingID());
 
         if (listingData.isPresent()) {
