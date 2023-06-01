@@ -8,8 +8,8 @@ import sdu.se06.Catalog.model.Listing;
 import java.util.List;
 import java.util.Optional;
 
-@RequestMapping("/api/v1/")
 @CrossOrigin("*")
+@RequestMapping("/api/v1/")
 @RestController
 public class CatalogController {
 

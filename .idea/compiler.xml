@@ -11,11 +11,11 @@
         <module name="Biddingservice" />
         <module name="auction-common" />
         <module name="Catalog" />
-        <module name="Gateway" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="APIGateway" target="17" />
+      <module name="Gateway" target="17" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

@@ -26,6 +26,7 @@ function Catalog(){
               <Card.Img className="cardImg" src={process.env.PUBLIC_URL + './images/placeholder.jpg'} />
               <Card.Title className="cardTitle">{listing.listingName}</Card.Title>
               <Card.Text className="cardDescription">{listing.listingDescription}</Card.Text>
+              <Card.Text className="cardPrice">Current Bid: {listing.listingPrice}</Card.Text>
               <Link className="listingLink" to={`/listing/${listing.listingID}`} state={{ id: listing.listingID }}>
                 View Details
               </Link>
