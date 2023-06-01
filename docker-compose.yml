@@ -37,6 +37,7 @@ services:
   ##  ACCOUNT
   accountservice:
     container_name: accountservice
+    restart: on-failure
     build:
       context: ./Account
       dockerfile: Account-Docker
