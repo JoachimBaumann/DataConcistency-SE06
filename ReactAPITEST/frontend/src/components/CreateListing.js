@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext} from "react";
 import axios from "axios";
 import UserContext from "./UserContext";
+import { Link, useNavigate } from "react-router-dom";
 
 
 const CreateListing = () => {
@@ -15,6 +16,7 @@ const CreateListing = () => {
     const[pictureURL, setPictureURL] = useState("");
     const selectedUserID = useContext(UserContext); // Access the selectedUserID from context
     const [currentUserID, setCurrentUserID] = useState("");
+    const navigate = useNavigate();
   
     useEffect(() => {
       setCurrentUserID(selectedUserID);
@@ -24,7 +26,6 @@ const CreateListing = () => {
         e.preventDefault();
         console.log(
             listingName, 
-            closed, 
             listingPrice, 
             listingDescription, 
             listingCondition, 
@@ -35,13 +36,13 @@ const CreateListing = () => {
         try{
             const resp = await axios.post(url, {
                 listingName: listingName, 
-                closed: closed, 
                 listingPrice: listingPrice, 
                 listingDescription: listingDescription, 
                 listingCondition: listingCondition,
                 pictureURL: pictureURL
             });
             console.log(resp.data)
+            navigate("/")
         } catch(error){
             console.log(error.response)
         }
@@ -62,17 +63,6 @@ const CreateListing = () => {
                 onChange={(e) => setListingName(e.target.value)}
                 />
                     </div>
-                <div className="form-row">
-                    <label htmlFor="closed" className="form-label">
-                    Listing Status:                 
-                    </label>
-                    <input type="closed" 
-                    className="form-input" 
-                    id="closed" 
-                    value={closed}
-                    onChange={(e) => setClosed(e.target.value)}
-                />
-                </div>
                 <div className="form-row">
                  <label htmlFor="listingPrice" className="form-label">
                 Listing Price:                
@@ -117,7 +107,9 @@ const CreateListing = () => {
                 onChange={(e) => setPictureURL(e.target.value)}
             />
             </div>
-            <button>Click me</button>
+            <button>
+                Submit listing
+            </button>
             </form>
         </section>
     )
